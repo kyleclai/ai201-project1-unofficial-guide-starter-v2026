@@ -8,5 +8,13 @@ def judge(question, expects, answer, results) -> bool:
 
     """
     typically in industry you'll run: "llm as judge"
-    use rapidfuzz to write a judge function, use the judge function above as a template to check expected answers.
+
+    could use rapidfuzz to write a judge function, use the judge function above as a template to check expected answers.
+
+    could create rapidfuzz but don't need to do
     """
+
+    def retrieval_hits(expected, results) -> bool:
+        """
+        any part of my expect in the results
+        """

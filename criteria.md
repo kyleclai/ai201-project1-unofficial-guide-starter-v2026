@@ -57,6 +57,8 @@ in at least 4 of 5 tries.
 
 ## 4. Something about your chunks
 
+At least 4 of 5 answer is written in completely sentence form and not broken. Using and ending with proper punctuation.
+
 <!-- YOU WRITE THIS ONE.
 
      How would you know if your chunks were the right size? Name something
@@ -78,6 +80,8 @@ in at least 4 of 5 tries.
 ---
 
 ## 5. Your choice
+
+Every answer that includes a number can be written in numerical or string form and be understood the same.
 
 <!-- YOU WRITE THIS ONE TOO.
 
