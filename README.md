@@ -1,124 +1,127 @@
 # The Unofficial Guide
 
-<!-- Replace this line with your name and which corpus you picked. -->
+Kyle Clai — corpus: campus_life
 
 > **This file is your submission.** Fill it in as you go — most sections get
 > written during the milestone that produces them, not at the end.
 >
 > How the starter works, and every command you'll need, is in `RUNNING.md`.
 > Leave that file alone.
->
-> **Paste everything as text.** No screenshots, no video. A typed table gets
-> full credit; a picture of the same table gets none.
->
-> Delete these instruction blocks as you replace them. The `<!-- -->` comments
-> are notes to you and don't show up when the page renders — you can leave them
-> or remove them.
-
----
-
-# Unit 1
 
 ## What This Does
 
-<!-- Three or four sentences. Which corpus you picked, and the kinds of
-     questions your system answers. Write it for someone who has never seen
-     this repo.
-
-     Milestone 5. -->
+The Unofficial Guide searches the `campus_life` corpus of 88 student-written
+and administrative campus documents. It answers specific questions about
+registration, dining hours, housing, courses, and transportation by retrieving
+relevant chunks from those documents. Before asking the model to write an
+answer, the system checks whether the closest chunk is relevant enough; answers
+that pass the gate cite the source document they used.
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** paragraph-based, 80–397 characters per chunk, 188 average
+**Overlap:** 0; chunks follow paragraph boundaries
 
-<!-- What about YOUR documents made you pick these numbers? Short posts and
-     long sectioned guides don't want the same chunking, and "800 seemed
-     reasonable" earns nothing. Point at something you noticed when you read
-     the documents in Milestone 1.
+The `campus_life` corpus contains 88 short forum posts, between 178 and 549
+characters. The starter's 800-character window never split these posts, so a
+single chunk could contain several unrelated topics. For example,
+`housing_innisfree_hall.txt` combines room information, pros and cons, laundry,
+and noise.
 
-     If you changed your mind partway through, say so and say why. That's worth
-     more than pretending you got it right first time.
-
-     Milestone 3. -->
+I split on blank lines so each paragraph becomes a focused chunk. Paragraphs
+shorter than 80 characters merge with the next paragraph instead of becoming
+an isolated fragment. I also prepend each document title so a paragraph such as
+"Laundry costs $1.75 wash" keeps its building or course context. The result is
+88 documents becoming 159 chunks, averaging 188 characters, with a shortest
+chunk of 103 characters.
 
 ## Sample Chunks
 
-<!-- Five chunks, pasted as text. Label each one and name the file it came from
-     AND the function that produced it — the grader checks your code against
-     what you claim here.
-
-     `python app.py chunks -n 5` prints all three for you. Copy them straight
-     across.
-
-     Milestone 3. -->
-
-**Chunk 1** — source: `` — produced by: ``
+**Chunk 1** — source: `admin_add_drop_deadline.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+On the add/drop deadline
+
+You can add a course through the end of the second week. Dropping is a longer window — through the end of week six — but a drop after week two shows as a W on your transcript. Nothing anywhere on the registrar's site says this plainly, and students find out from each other.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: `course_cs_340_exams.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+CS 340 Databases — assessment
+
+Start the term project in week three, not week eight; everyone learns this the hard way.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: `course_stat_150_workload.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+Workload for STAT 150 Applied Statistics
+
+People keep asking so: 5 to 6 hours a week outside class. That's real time, not optimistic time.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: `housing_aldridge_hall.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+Aldridge Hall — what it's actually like
+
+The good: closest building to the science quad, four minutes to a 9am lab.
+
+The bad: the elevator is out roughly one week per semester.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: `housing_morrow_house.txt#3` — produced by: `chunker.py::split_documents`
 
 ```
+Morrow House — what it's actually like
+
+Laundry costs $1.50 wash, $1.25 dry, coin or card. On noise: loud until about 1am on weekends, no enforced quiet hours.
 ```
 
 ## Sample Answer
 
-<!-- One complete question and answer, pasted as text, with the source line
-     visible. Milestone 4. -->
+**Question:** When does the latest dining hall close?
 
-**Question:**
+**Answer:** Based on the provided documents, Halden Hall closes at 7:00pm.
 
-**Answer:**
+**Source:** `dining_halden_hall.txt` (also mentioned in
+`dining_halden_hall_followup.txt`).
 
-```
-```
+The live run's best distance was `0.334`, below the `0.6` cutoff.
 
-**My relevance cutoff:**
+**My relevance cutoff:** `0.6`
 
-<!-- The number you set in config.py, and how you got there.
-
-     You ran five questions your corpus covers and the five in OUT_OF_SCOPE
-     that it clearly doesn't, and wrote down the best distance for each. What
-     did those two groups look like? Where was the gap? Put the actual numbers
-     here — the table below wants all ten rows.
-
-     Milestone 4. -->
+The five in-scope questions had best distances from `0.3339` to `0.5279`.
+The five out-of-scope questions ranged from `0.8246` to `0.9231`, leaving a
+clear gap. The `0.6` cutoff let all five in-scope questions through and refused
+all five out-of-scope questions.
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| When should I register for classes | Yes | 0.4945 |
+| When does the latest dining hall close? | Yes | 0.3339 |
+| How many campus housing/dorms are there? | Yes | 0.4882 |
+| Which math courses don't have a final? | Yes | 0.5279 |
+| How often does the campus bus come around? | Yes | 0.3884 |
+| What is the capital of Mongolia? | No | 0.8246 |
+| How do I change the oil in a diesel engine? | No | 0.9231 |
+| Who won the 1994 World Cup? | No | 0.8859 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.8477 |
+| How do I write a for loop in Rust? | No | 0.8768 |
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
+**1.** I asked AI to pressure-test whether my acceptance criteria were specific
+enough for another person to test. It helped identify that the chunk criterion
+needed an observable target, so I wrote criterion 4 as “at least 4 of 5 sampled
+chunks read as a complete thought.”
 
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
-
-**1.**
-
-**2.**
+**2.** I asked AI to inspect the starter chunking behavior and suggest a
+strategy for the short `campus_life` posts. The paragraph-splitting suggestion
+was useful, but I chose the 80-character merge threshold and title prefix after
+reading the documents. I checked the result manually: 159 chunks, with none
+shorter than 103 characters.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
