@@ -110,7 +110,7 @@ Underneath the table, paste the real output for each criterion from one of your 
 📍 Before you move on
 
 - [x] The run log has all five criteria, three runs each, and pasted output underneath.
-- [ ] Commit it.
+- [x] Commit it.
 
 If all three runs came out identical on every criterion, check that you're really re-running rather than reading a cached result.
 
@@ -158,7 +158,7 @@ If the argument against you is any good, look again.
 
 - [x] Every criterion has MET or MISSED and a sentence on how you decided.
 - [x] No criteria were revised; the original criteria remain unchanged in `criteria.md`.
-- [ ] Commit.
+- [x] Commit.
 
 
 
@@ -205,7 +205,7 @@ That one check separates most failures, and it takes two minutes.
 📍 Before you move on
 
 - [x] Every miss has a named stage and a mechanism.
-- [ ] Commit.
+- [x] Commit.
 
 
 
@@ -257,7 +257,7 @@ A failed improvement you can explain is a complete submission. An unfinished one
 
 - [x] Both run logs are in your README.
 - [x] You can say in one sentence whether the change helped and how you know.
-- [ ] Commit.
+- [x] Commit.
 
 
 
