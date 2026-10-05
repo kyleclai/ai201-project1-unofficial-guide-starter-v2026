@@ -196,7 +196,7 @@ Any criterion it can't turn into a test is one a grader can't either. You still 
 
 - [x] `questions.py` holds five questions, each with its `expects` phrase.
 - [x] `criteria.md` has five numbered criteria, each naming a number or an observable outcome, with a reason underneath it.
-- [ ] Commit both — the next unit reads them.
+- [x] Commit both — the next unit reads them.
 
 
 
@@ -250,7 +250,7 @@ That's not giving up. It's a real observation about your pipeline, and in the ne
 
 - [x] Five chunks are in your README, labeled with sources and the function name.
 - [x] The five chunks read as complete thoughts.
-- [ ] Commit.
+- [x] Commit.
 
 
 
@@ -312,7 +312,7 @@ Bring it to your group. Someone else has probably seen the same thing.
 
 - [x] You can ask a question and get an answer that names its source.
 - [x] Asking something off-topic gets you an honest "I don't know" instead of a made-up answer.
-- [ ] Commit.
+- [x] Commit.
 
 
 
