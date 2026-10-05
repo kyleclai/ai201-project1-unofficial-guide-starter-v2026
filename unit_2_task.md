@@ -1,3 +1,5 @@
+# This is the Week 2 HW Task of AI201
+
 Show What You Know: The Unofficial Guide, Part 2 — Testing
 In the previous unit, you built a system and wrote down what "working" would mean for it. You filed those five criteria before you had any results, which means nobody — including you — knew whether your system would clear them.
 
@@ -75,7 +77,7 @@ If your system from the previous unit won't run at all, talk to your TF!
 
 
 
-Milestone 1: Run your test
+## Milestone 1: Run your test
 ⏰ ~40 min
 
 Run your five test questions against your system three separate times, and write down what happened each time.
@@ -116,7 +118,7 @@ If all three runs came out identical on every criterion, check that you're reall
 
 
 
-Milestone 2: Call each criterion
+## Milestone 2: Call each criterion
 ⏰ ~45 min
 
 Go criterion by criterion and say met or missed, against the target you wrote in the previous unit.
@@ -162,7 +164,7 @@ If the argument against you is any good, look again.
 
 
 
-Milestone 3: Diagnose every miss
+## Milestone 3: Diagnose every miss
 ⏰ ~45 min
 
 For each criterion you missed, work out which part of your pipeline caused it.
@@ -209,7 +211,7 @@ That one check separates most failures, and it takes two minutes.
 
 
 
-Milestone 4: Fix one thing and measure it
+## Milestone 4: Fix one thing and measure it
 ⏰ ~90 min
 
 Pick one thing your diagnosis pointed at, change it, and run your whole test again.
@@ -261,7 +263,7 @@ A failed improvement you can explain is a complete submission. An unfinished one
 
 
 
-Milestone 5: Say what's still broken, and submit
+## Milestone 5: Say what's still broken, and submit
 ⏰ ~45 min
 
 Finish the write-up and make the call on everything you didn't fix.
@@ -281,8 +283,8 @@ Check the repo and submit the same URL you submitted in the previous unit.
 📍 Before you move on
 
 - [x] Your README has both run logs, a verdict per criterion, your diagnoses, and your call on what's left.
-- [ ] Same repository URL as in the previous unit.
-- [ ] Commit.
+- [x] Same repository URL as in the previous unit.
+- [x] Commit.
 
 
 
