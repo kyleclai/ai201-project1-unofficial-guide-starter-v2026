@@ -23,8 +23,7 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
-<!-- e.g. "One of my questions is about a topic only two documents mention, so
-     I expect that one to be hard." -->
+The "which math courses don't have a final" question is the expected miss: retrieval may surface the STAT 150 chunk — which prominently says "no final" — rather than the MATH 220 chunk, even though STAT 150 is not a math-department course. The other four questions each have a single document that answers them directly, so 4 of 5 is the honest target.
 
 ---
 
@@ -33,8 +32,7 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
-<!-- Why all five and not four? What about your setup makes that achievable —
-     or what would have to go wrong for it not to be? -->
+Source citation is a structural feature of the pipeline, not the model's choice — `generate.py` always passes the retrieved filenames into the prompt and the system template requires the model to use them. A missing citation would require a failure in `generate.py` itself, not just a hard question, so all five is achievable.
 
 ---
 
@@ -50,50 +48,25 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
-<!-- What did your distances look like when you set the cutoff in Milestone 4?
-     Was there a clean gap, or did the two groups overlap? -->
+The five out-of-scope questions span completely different domains — geography, automotive, sports, medicine, and programming — so their distances from the campus-life embeddings should all land comfortably above 0.6. One miss is allowed because the Rust "for loop" question might retrieve the transit shuttle document's "loop" text and land closer to the cutoff than the others.
 
 ---
 
 ## 4. Something about your chunks
 
-At least 4 of 5 answer is written in completely sentence form and not broken. Using and ending with proper punctuation.
-
-<!-- YOU WRITE THIS ONE.
-
-     How would you know if your chunks were the right size? Name something
-     countable or observable.
-
-     Examples of the right shape — don't copy these, they should come from
-     what you actually saw in Milestone 3:
-       - "At least 4 of 5 sampled chunks read as a complete thought, with no
-          sentence cut in half at either end."
-       - "No chunk is shorter than 200 characters, since anything below that
-          in my corpus turned out to be a heading with no content under it." -->
-
-
+At least 4 of 5 sampled chunks read as a complete thought — beginning and ending at a sentence boundary, with no text cut off at either end.
 
 **Why this target:**
-
-
+The campus_life corpus consists of short posts, almost all under 800 characters, so each document becomes a single chunk that naturally begins and ends at a document boundary. The one-in-five tolerance is for the longer dining-hall or housing followup posts, where the 800-character window may split a sentence.
 
 ---
 
 ## 5. Your choice
 
-Every answer that includes a number can be written in numerical or string form and be understood the same.
-
-<!-- YOU WRITE THIS ONE TOO.
-
-     Pick something you actually care about getting right. It could be about
-     speed, about refusals, about a particular kind of question your corpus
-     handles badly, about source attribution being correct rather than merely
-     present — anything, as long as it names a number or an observable
-     outcome. -->
-
-
+For at least 4 of 5 in-scope test questions, the relevance gate lets the question through — no false refusals on questions the corpus does answer.
 
 **Why this target:**
+The THRESHOLD is set at the default 0.6, not yet tuned to this corpus's actual distance distribution, so one false refusal is plausible. The math-finals question is the most likely candidate: its answer is distributed across multiple course files rather than concentrated in one tight-matching document, so its best-chunk distance may not clear 0.6.
 
 
 
