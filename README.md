@@ -150,15 +150,29 @@ shorter than 103 characters.
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 3/5 | 3/5 | 3/5 | MISSED |
+| 2. Every answer names a source | 5 of 5 | 4/5 | 4/5 | 4/5 | MISSED |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Sampled chunks are complete thoughts | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Gate lets in-scope questions through | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
      Name the file and function that produced it. -->
+
+**Evidence:** `results/run_2026-10-04_2229_before.md`, produced by
+`run_eval.py::main`, using `store.py::search`, `gate.py::check`, and
+`generate.py::answer_from_chunks`.
+
+Representative baseline output:
+
+```text
+Registration times are staggered by credit hours, and popular courses fill in the first two days (advising_registration.txt).
+Based on the provided documents, Halden Hall closes at 7:00pm.
+I do not have enough information to determine how many campus housing/dorms there are.
+I do not have enough information to answer which math courses don't have a final.
+The campus shuttle runs a loop every 20 minutes from 7am to 11pm on weekdays, and every 40 minutes on weekends.
+```
 
 ## Verdicts
 
@@ -173,11 +187,11 @@ shorter than 103 characters.
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunks contain the answer | MISSED | Only 3 of 5 questions had an answer-bearing chunk in the baseline top-five results. |
+| 2 | Every answer names a source | MISSED | Four of five answers named a source in each run; housing had no source and math cited one only once. |
+| 3 | Gate stops out-of-corpus questions | MET | The gate refused all 5 of 5 out-of-scope questions. |
+| 4 | Sampled chunks are complete thoughts | MET | All five sampled chunks begin and end at readable document or paragraph boundaries. |
+| 5 | Gate lets in-scope questions through | MET | All 5 of 5 in-scope questions passed the 0.6 gate in every run. |
 
 ## Diagnoses
 
@@ -199,11 +213,25 @@ shorter than 103 characters.
 
      Milestone 3. -->
 
+**Criterion 1 — Retrieval and question design:** The baseline top-five results
+contained the registration and shuttle answers, but not the Pellew 8:00pm
+chunk, an explicit housing count, or a no-final math course. The dining answer
+was ranked below the first five, while the housing and math questions ask for
+answers that are not stated directly in the retrieved chunks.
+
+**Criterion 2 — Generation and question design:** The model usually cited a
+source when it had a concrete answer, but it correctly refused to invent a
+housing count and therefore had no source to name. The math answer also
+sometimes refused without a source. The grounding prompt does not require a
+source line on an information-shortage refusal.
+
 ## The Improvement
 
-**What I changed:**
+**What I changed:** Increased `config.TOP_K` from 5 to 8.
 
-**Why I picked it:**
+**Why I picked it:** The dining retrieval showed the relevant
+`dining_pellew_dining_hall.txt` chunk at rank 6, outside the original result
+window. This directly targets Criterion 1's retrieval diagnosis.
 
 <!-- Connect it to a specific diagnosis above in one sentence. If you can't,
      you picked a fix because it sounded impressive. -->
@@ -215,11 +243,22 @@ shorter than 103 characters.
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 3/5 | 3/5 | 3/5 | MISSED |
+| 2. Every answer names a source | 5 of 5 | 4/5 | 4/5 | 5/5 | MISSED |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 4. Sampled chunks are complete thoughts | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+| 5. Gate lets in-scope questions through | 4 of 5 | 5/5 | 5/5 | 5/5 | MET |
+
+**Evidence:** `results/run_2026-10-04_2247_after.md`, produced by
+`run_eval.py::main` after changing only `config.TOP_K`.
+
+Representative after output:
+
+```text
+Pellew Dining Hall is open until 8:00pm daily, which is the latest closing time among the dining halls mentioned. Source: dining_pellew_dining_hall.txt
+Based on the provided documents, there are five campus housing/dorms mentioned: Aldridge Hall, Tamsin Court, Innisfree Hall, Old Brewhouse, and Calder Annexe.
+I do not have enough information to answer which math courses don't have a final.
+```
 
 **Did it help?**
 
@@ -229,6 +268,11 @@ shorter than 103 characters.
      tell.
 
      Milestone 4. -->
+
+The change helped the dining question and made the housing question answerable
+once, but it did not reliably improve the criteria: Criterion 1 stayed at 3/5
+and Criterion 2 stayed below 5/5. The gate criteria remained perfect at 5/5.
+More context was not enough by itself and sometimes added distractors.
 
 ## What's Still Broken
 
@@ -240,9 +284,27 @@ shorter than 103 characters.
 
      Milestone 5. -->
 
+Criterion 1 is still missed because broad or comparative questions do not
+consistently retrieve answer-bearing chunks. The next improvement would be
+hybrid keyword-plus-semantic search so exact terms such as `no final`, course
+names, and dining-hall names receive more weight. I stopped after one change
+because Unit 2 requires a measurable before/after comparison.
+
+Criterion 2 is still missed because grounded refusals do not name a source.
+The next prompt change would require every response, including an information
+shortage response, to include retrieved source filenames when sources exist. I
+did not make that second change in this unit.
+
 ## What I'd Do Differently
 
 <!-- Knowing what you know now — which of your five criteria would you write
      differently, and why?
 
      Milestone 5. -->
+
+I would rewrite Criterion 1 to use five questions whose answers are each
+explicitly present in a named document. The original criterion combines
+retrieval failure with questions whose answers are not stated directly in the
+corpus. I would also clarify Criterion 2 as: every non-refusal answer names a
+source, and every refusal explains that the retrieved sources lack enough
+information.
