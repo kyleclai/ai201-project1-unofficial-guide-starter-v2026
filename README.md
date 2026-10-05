@@ -123,6 +123,14 @@ was useful, but I chose the 80-character merge threshold and title prefix after
 reading the documents. I checked the result manually: 159 chunks, with none
 shorter than 103 characters.
 
+**3.** In Unit 2, I used AI to help compare the generated answers with the
+baseline run log. The exact-phrase scorer marked every answer as a failure, but
+reading the retrieved chunks showed that some answers were semantically correct
+and some questions did not have explicit answers in the corpus. I kept the
+original criteria, documented those distinctions in the diagnoses, and chose a
+single top-k retrieval change rather than changing the scorer to make the
+results look better.
+
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
      claims earns nothing.
