@@ -19,6 +19,9 @@ chroma/
 # Cached model responses
 .cache/
 
+# Private working notes — not part of the submission
+retrospectives/
+
 # OS noise
 .DS_Store
 Thumbs.db
